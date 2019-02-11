@@ -1,52 +1,52 @@
 enum UserGender {
-    male
-    female
+  male
+  female
 }
 
 type User {
-    id: ID!
-    email: String!
-    email_verified: Bool!
-    given_name: String
-    family_name: String
-    middle_name: String
-    # nickname: String
-    # preferred_username: String
-    # profile: String
-    # picture: String
-    # website: String
-    # gender: UserGender
-    # birthdate: Date
-    # zoneinfo: String
-    # locale: String
-    # phone_number: String
-    # phone_number_verified: String
-    # address: String
-    updated_at: String
+  id: ID!
+  email: String!
+  email_verified: Bool!
+  given_name: String
+  family_name: String
+  middle_name: String
+  # nickname: String
+  # preferred_username: String
+  # profile: String
+  # picture: String
+  # website: String
+  # gender: UserGender
+  # birthdate: Date
+  # zoneinfo: String
+  # locale: String
+  # phone_number: String
+  # phone_number_verified: String
+  # address: String
+  updated_at: String
 }
 
-query {
-    # find user by email (also check if given email address isn't taken)
-    getUser(email: String!): User
-    # check credentials and return user
-    login(email: String!,password: String!): User
+type query {
+  # find user by email (also check if given email address isn't taken)
+  getUser(email: String!): User
+  # check credentials and return user
+  login(email: String!, password: String!): User
 }
 
 input UserInput {
-    email: String!
-    password: String!
-    given_name: String
-    family_name: String
-    middle_name: String
+  email: String!
+  password: String!
+  given_name: String
+  family_name: String
+  middle_name: String
 }
 
-mutation {
-    # https://auth0.com/docs/connections/database/custom-db/templates/create#javascript
-    createUser(user: UserInput): User!
-    
-    deleteUser(id: ID!): User!
-    # mask user as verified
-    verifyUser(email: String!): User!
-    # change password for given user (user login to check if previous password is valid)
-    changePassword(email: String!,newPassword: String!): User!
+type mutation {
+  # https://auth0.com/docs/connections/database/custom-db/templates/create#javascript
+  createUser(user: UserInput): User!
+
+  deleteUser(id: ID!): User!
+  # mask user as verified
+  verifyUser(email: String!): User!
+  # change password for given user (user login to check if previous password is valid)
+  changePassword(email: String!, newPassword: String!): User!
 }
