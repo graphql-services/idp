@@ -11,8 +11,9 @@ import (
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/graphql-services/idp/controller"
+	"github.com/graphql-services/idp/database"
 	"github.com/graphql-services/idp/model"
-	"github.com/graphql-services/idp/src"
+	"github.com/graphql-services/idp/resolvers"
 	"github.com/urfave/cli"
 )
 
@@ -59,12 +60,12 @@ func startServer(urlString, port string) error {
 	}
 	s := string(dat)
 
-	db := src.NewDBWithString(urlString)
+	db := database.NewDBWithString(urlString)
 	defer db.Close()
-	db.AutoMigrate(&model.ChangeLog{}, &src.Meta{})
+	db.AutoMigrate(&model.User{})
 
 	r := mux.NewRouter()
-	q := src.NewQuery(db)
+	q := resolvers.NewQuery(db)
 	schema := graphql.MustParseSchema(s, &q)
 	r.Handle("/graphql", &relay.Handler{Schema: schema})
 

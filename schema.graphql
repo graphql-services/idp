@@ -1,3 +1,10 @@
+scalar Time
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
 enum UserGender {
   male
   female
@@ -6,7 +13,7 @@ enum UserGender {
 type User {
   id: ID!
   email: String!
-  email_verified: Bool!
+  email_verified: Boolean!
   given_name: String
   family_name: String
   middle_name: String
@@ -22,14 +29,14 @@ type User {
   # phone_number: String
   # phone_number_verified: String
   # address: String
-  updated_at: String
+  updated_at: Time!
 }
 
-type query {
+type Query {
   # find user by email (also check if given email address isn't taken)
   getUser(email: String!): User
   # check credentials and return user
-  login(email: String!, password: String!): User
+  login(email: String!, password: String!): User!
 }
 
 input UserInput {
@@ -40,11 +47,11 @@ input UserInput {
   middle_name: String
 }
 
-type mutation {
+type Mutation {
   # https://auth0.com/docs/connections/database/custom-db/templates/create#javascript
-  createUser(user: UserInput): User!
-
+  createUser(user: UserInput!): User!
   deleteUser(id: ID!): User!
+
   # mask user as verified
   verifyUser(email: String!): User!
   # change password for given user (user login to check if previous password is valid)

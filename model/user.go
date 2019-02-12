@@ -12,8 +12,9 @@ type User struct {
 	IID            uuid.UUID `gorm:"primary_key"`
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
-	DeletedAt      *time.Time `sql:"index"`
-	IEmail         string
+	DeletedAt      *time.Time `gorm:"index"`
+	IEmail         string     `gorm:"unique"`
+	IPasswordHash  string
 	IEmailVerified bool
 	IGivenName     *string
 	IFamilyName    *string

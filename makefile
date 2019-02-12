@@ -1,5 +1,5 @@
 OWNER=graphql
-IMAGE_NAME=event-store-changelog
+IMAGE_NAME=ipd
 QNAME=$(OWNER)/$(IMAGE_NAME)
 
 GIT_TAG=$(QNAME):$(TRAVIS_COMMIT)
