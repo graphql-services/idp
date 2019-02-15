@@ -13,6 +13,7 @@ enum UserGender {
 type User {
   id: ID!
   email: String!
+  passwordHash: String!
   email_verified: Boolean!
   given_name: String
   family_name: String
@@ -49,7 +50,7 @@ input UserInput {
 
 type Mutation {
   # https://auth0.com/docs/connections/database/custom-db/templates/create#javascript
-  createUser(user: UserInput!): User!
+  createUser(input: UserInput!): User!
   deleteUser(id: ID!): User!
 
   # mask user as verified

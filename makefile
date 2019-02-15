@@ -1,5 +1,5 @@
 OWNER=graphql
-IMAGE_NAME=ipd
+IMAGE_NAME=idp
 QNAME=$(OWNER)/$(IMAGE_NAME)
 
 GIT_TAG=$(QNAME):$(TRAVIS_COMMIT)
@@ -25,16 +25,23 @@ push: login
 	# docker push $(GIT_TAG)
 	# docker push $(BUILD_TAG)
 	docker push $(TAG)
-	
+
+generate:
+	go run scripts/gqlgen.go -v
+	go generate ./...
 
 build-local:
-	go get ./...
-	go build -o $(IMAGE_NAME)
+	# go get ./...
+	# go build -o $(IMAGE_NAME) ./server/server.go
+	go build -o $(IMAGE_NAME) ./server/server.go
 
 deploy-local:
 	make build-local
 	mv $(IMAGE_NAME) /usr/local/bin/
 
-test:
-	make deploy-local && DATABASE_URL=sqlite3://test.db $(IMAGE_NAME) server -p 8005
+run:
+	DATABASE_URL=sqlite3://test.db go run server/server.go
+
+# test:
+# 	DATABASE_URL=sqlite3://test.db $(IMAGE_NAME) server -p 8005
 	# DATABASE_URL="mysql://root:root@tcp(localhost:3306)/test?parseTime=true" go run *.go server -p 8000
