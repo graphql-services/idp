@@ -35,6 +35,11 @@ const (
 	UserGenderFemale UserGender = "female"
 )
 
+var AllUserGender = []UserGender{
+	UserGenderMale,
+	UserGenderFemale,
+}
+
 func (e UserGender) IsValid() bool {
 	switch e {
 	case UserGenderMale, UserGenderFemale:

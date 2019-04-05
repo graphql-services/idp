@@ -27,7 +27,7 @@ push: login
 	docker push $(TAG)
 
 generate:
-	go run scripts/gqlgen.go -v
+	go run github.com/99designs/gqlgen
 	go generate ./...
 
 build-local:
