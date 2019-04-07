@@ -40,7 +40,7 @@ deploy-local:
 	mv $(IMAGE_NAME) /usr/local/bin/
 
 run:
-	DATABASE_URL=sqlite3://test.db go run server/server.go
+	DATABASE_URL=sqlite3://test.db PORT=8080 go run server/server.go
 
 # test:
 # 	DATABASE_URL=sqlite3://test.db $(IMAGE_NAME) server -p 8005
