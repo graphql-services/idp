@@ -57,10 +57,7 @@ type ComplexityRoot struct {
 	User struct {
 		Email         func(childComplexity int) int
 		EmailVerified func(childComplexity int) int
-		FamilyName    func(childComplexity int) int
-		GivenName     func(childComplexity int) int
 		ID            func(childComplexity int) int
-		MiddleName    func(childComplexity int) int
 		PasswordHash  func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 	}
@@ -178,33 +175,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.EmailVerified(childComplexity), true
 
-	case "User.FamilyName":
-		if e.complexity.User.FamilyName == nil {
-			break
-		}
-
-		return e.complexity.User.FamilyName(childComplexity), true
-
-	case "User.GivenName":
-		if e.complexity.User.GivenName == nil {
-			break
-		}
-
-		return e.complexity.User.GivenName(childComplexity), true
-
 	case "User.ID":
 		if e.complexity.User.ID == nil {
 			break
 		}
 
 		return e.complexity.User.ID(childComplexity), true
-
-	case "User.MiddleName":
-		if e.complexity.User.MiddleName == nil {
-			break
-		}
-
-		return e.complexity.User.MiddleName(childComplexity), true
 
 	case "User.PasswordHash":
 		if e.complexity.User.PasswordHash == nil {
@@ -314,9 +290,9 @@ type User {
   email: String!
   passwordHash: String!
   email_verified: Boolean!
-  given_name: String
-  family_name: String
-  middle_name: String
+  # given_name: String
+  # family_name: String
+  # middle_name: String
   # nickname: String
   # preferred_username: String
   # profile: String
@@ -872,78 +848,6 @@ func (ec *executionContext) _User_email_verified(ctx context.Context, field grap
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _User_given_name(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
-	rctx := &graphql.ResolverContext{
-		Object:   "User",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GivenName, nil
-	})
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _User_family_name(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
-	rctx := &graphql.ResolverContext{
-		Object:   "User",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.FamilyName, nil
-	})
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _User_middle_name(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
-	rctx := &graphql.ResolverContext{
-		Object:   "User",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp := ec.FieldMiddleware(ctx, obj, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.MiddleName, nil
-	})
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_updated_at(ctx context.Context, field graphql.CollectedField, obj *User) graphql.Marshaler {
@@ -1986,12 +1890,6 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
-		case "given_name":
-			out.Values[i] = ec._User_given_name(ctx, field, obj)
-		case "family_name":
-			out.Values[i] = ec._User_family_name(ctx, field, obj)
-		case "middle_name":
-			out.Values[i] = ec._User_middle_name(ctx, field, obj)
 		case "updated_at":
 			out.Values[i] = ec._User_updated_at(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

@@ -32,7 +32,7 @@ type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input UserInput) (*User, error) {
 	ID := uuid.Must(uuid.NewV4())
-	user := User{ID: ID.String(), Email: input.Email, GivenName: input.GivenName, FamilyName: input.FamilyName, MiddleName: input.MiddleName}
+	user := User{ID: ID.String(), Email: input.Email}
 
 	if err := user.UpdatePassword(input.Password); err != nil {
 		return &user, err

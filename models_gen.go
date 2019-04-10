@@ -14,9 +14,6 @@ type User struct {
 	Email         string    `json:"email"`
 	PasswordHash  string    `json:"passwordHash"`
 	EmailVerified bool      `json:"email_verified"`
-	GivenName     *string   `json:"given_name"`
-	FamilyName    *string   `json:"family_name"`
-	MiddleName    *string   `json:"middle_name"`
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
