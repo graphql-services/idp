@@ -28,8 +28,8 @@ func main() {
 	defer db.Close()
 	db.AutoMigrate(&idp.User{})
 
-	http.Handle("/", handler.Playground("GraphQL playground", "/query"))
-	http.Handle("/query", handler.GraphQL(idp.NewExecutableSchema(idp.Config{Resolvers: &idp.Resolver{DB: db}})))
+	http.Handle("/", handler.Playground("GraphQL playground", "/graphql"))
+	http.Handle("/graphql", handler.GraphQL(idp.NewExecutableSchema(idp.Config{Resolvers: &idp.Resolver{DB: db}})))
 
 	http.HandleFunc("/healthcheck", func(res http.ResponseWriter, req *http.Request) {
 		res.Write([]byte("OK"))
