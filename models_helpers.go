@@ -8,7 +8,7 @@ import (
 
 // UpdatePassword hash password and assign it to pass word attribute
 func (n *User) UpdatePassword(p string) error {
-	passwordHash, err := bcrypt.GenerateFromPassword([]byte(p), 12)
+	passwordHash, err := bcrypt.GenerateFromPassword([]byte(p), 10)
 	if err != nil {
 		return err
 	}
