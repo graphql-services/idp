@@ -24,7 +24,7 @@ services:
     links:
       - mysql
     environment:
-      - DATABASE_URL=mysql://root:root@tcp(mysql:3306)/test?parseTime=true
+      - DATABASE_URL=mysql://root:root@mysql:3306/test?parseTime=true
   test:
     image: jakubknejzlik/godog-graphql
     links:
@@ -33,7 +33,3 @@ services:
       - ./features:/godog/features
     environment:
       - GRAPHQL_URL=http://app/graphql
-    command:
-      - /bin/sh
-      - -c
-      - 'sleep 3 && godog'

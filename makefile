@@ -44,7 +44,7 @@ run:
 	DATABASE_URL=sqlite3://test.db PORT=8080 go run server/server.go
 
 test:
-	docker-compose up test && docker-compose down
+	docker-compose up --exit-code-from test test
 	# docker run --network="host" -v `PWD`/features:/godog/features -e GRAPHQL_URL=http://127.0.0.1:8080/graphql jakubknejzlik/godog-graphql
 # 	DATABASE_URL=sqlite3://test.db $(IMAGE_NAME) server -p 8005
 	# DATABASE_URL="mysql://root:root@tcp(localhost:3306)/test?parseTime=true" go run *.go server -p 8000
