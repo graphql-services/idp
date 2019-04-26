@@ -32,8 +32,8 @@ func main() {
 	http.Handle("/graphql", handler.GraphQL(idp.NewExecutableSchema(idp.Config{Resolvers: &idp.Resolver{DB: db}})))
 
 	http.HandleFunc("/healthcheck", func(res http.ResponseWriter, req *http.Request) {
-		res.Write([]byte("OK"))
 		res.WriteHeader(200)
+		res.Write([]byte("OK"))
 	})
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
