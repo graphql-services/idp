@@ -2,6 +2,7 @@ package database
 
 import (
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -34,6 +35,10 @@ func NewDBWithString(urlString string) *DB {
 	}
 
 	urlString = strings.Replace(u.String(), u.Scheme+"://", "", 1)
+
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		return os.Getenv("DATABASE_TABLE_PREFIX") + defaultTableName
+	}
 
 	db, err := gorm.Open(u.Scheme, urlString)
 	if err != nil {
