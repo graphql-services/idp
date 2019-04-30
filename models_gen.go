@@ -6,16 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-	"time"
 )
-
-type User struct {
-	ID            string    `json:"id"`
-	Email         string    `json:"email"`
-	PasswordHash  string    `json:"passwordHash"`
-	EmailVerified bool      `json:"email_verified"`
-	UpdatedAt     time.Time `json:"updated_at"`
-}
 
 type UserInput struct {
 	Email      string  `json:"email"`
