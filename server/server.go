@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/99designs/gqlgen/handler"
 	"github.com/graphql-services/idp"
 	"github.com/graphql-services/idp/database"
+	"github.com/graphql-services/memberships"
 )
 
 const defaultPort = "80"
@@ -28,9 +30,17 @@ func main() {
 	defer db.Close()
 	db.AutoMigrate(&idp.User{})
 
-	http.Handle("/", handler.Playground("GraphQL playground", "/graphql"))
-	http.Handle("/graphql", handler.GraphQL(idp.NewExecutableSchema(idp.Config{Resolvers: &idp.Resolver{DB: db}})))
-
+	gqlHandler := handler.GraphQL(idp.NewExecutableSchema(idp.Config{Resolvers: &idp.Resolver{DB: db}}))
+	playgroundHandler := handler.Playground("GraphQL playground", "/graphql")
+	http.HandleFunc("/graphql", func(res http.ResponseWriter, req *http.Request) {
+		if req.Method == "GET" {
+			playgroundHandler(res, req)
+			return
+		}
+		ctx := context.WithValue(req.Context(), memberships.DBContextKey, db)
+		req = req.WithContext(ctx)
+		gqlHandler(res, req)
+	})
 	http.HandleFunc("/healthcheck", func(res http.ResponseWriter, req *http.Request) {
 		res.WriteHeader(200)
 		res.Write([]byte("OK"))
