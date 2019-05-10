@@ -1,8 +1,8 @@
 package database
 
 import (
+	"fmt"
 	"net/url"
-	"os"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -30,15 +30,7 @@ func NewDBWithString(urlString string) *DB {
 		panic(err)
 	}
 
-	if u.Scheme != "sqlite3" {
-		u.Host = "tcp(" + u.Host + ")"
-	}
-
-	urlString = strings.Replace(u.String(), u.Scheme+"://", "", 1)
-
-	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
-		return os.Getenv("DATABASE_TABLE_PREFIX") + defaultTableName
-	}
+	urlString = getConnectionString(u)
 
 	db, err := gorm.Open(u.Scheme, urlString)
 	if err != nil {
@@ -48,14 +40,26 @@ func NewDBWithString(urlString string) *DB {
 	return NewDB(db)
 }
 
-// Query ...
-func (db *DB) Query() *gorm.DB {
+func getConnectionString(u *url.URL) string {
+	if u.Scheme == "postgres" {
+		password, _ := u.User.Password()
+		host := strings.Split(u.Host, ":")[0]
+		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", host, u.Port(), u.User.Username(), password, strings.TrimPrefix(u.Path, "/"))
+	}
+	if u.Scheme != "sqlite3" {
+		u.Host = "tcp(" + u.Host + ")"
+	}
+	return strings.Replace(u.String(), u.Scheme+"://", "", 1)
+}
+
+// Client ...
+func (db *DB) Client() *gorm.DB {
 	return db.db
 }
 
 // AutoMigrate ...
-func (db *DB) AutoMigrate(values ...interface{}) {
-	db.db.AutoMigrate(values...)
+func (db *DB) AutoMigrate(values ...interface{}) error {
+	return db.db.AutoMigrate(values...).Error
 }
 
 // Close ...

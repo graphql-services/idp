@@ -14,7 +14,7 @@ type Resolver struct {
 
 func (r *Resolver) getUserStrict(ctx context.Context, email string) (*User, error) {
 	var user User
-	query := r.DB.Query().Where(&User{Email: email}).First(&user)
+	query := r.DB.Client().Where(&User{Email: email}).First(&user)
 	if query.RecordNotFound() {
 		return &user, fmt.Errorf("user not found")
 	}
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input UserInput) (*Us
 		return &user, err
 	}
 
-	res := r.DB.Query().Create(&user)
+	res := r.DB.Client().Create(&user)
 
 	if res.Error != nil {
 		return &user, res.Error
@@ -48,7 +48,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input UserInput) (*Us
 }
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*User, error) {
 	var user User
-	query := r.DB.Query().Where(&User{ID: id}).First(&user)
+	query := r.DB.Client().Where(&User{ID: id}).First(&user)
 
 	if query.RecordNotFound() {
 		return &user, fmt.Errorf("not found")
@@ -62,7 +62,7 @@ func (r *mutationResolver) VerifyUser(ctx context.Context, email string) (*User,
 	}
 
 	user.EmailVerified = true
-	res := r.DB.Query().Save(&user)
+	res := r.DB.Client().Save(&user)
 
 	return user, res.Error
 }
@@ -72,7 +72,7 @@ func (r *mutationResolver) ChangePassword(ctx context.Context, email string, new
 		return user, err
 	}
 	user.UpdatePassword(newPassword)
-	query := r.DB.Query().Save(&user)
+	query := r.DB.Client().Save(&user)
 
 	return user, query.Error
 }
@@ -81,12 +81,12 @@ type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) GetUser(ctx context.Context, email string) (*User, error) {
 	var user User
-	query := r.DB.Query().Where(&User{Email: email}).First(&user)
+	query := r.DB.Client().Where(&User{Email: email}).First(&user)
 	return &user, query.Error
 }
 func (r *queryResolver) Login(ctx context.Context, email string, password string) (*User, error) {
 	var user User
-	query := r.DB.Query().Where(&User{Email: email}).First(&user)
+	query := r.DB.Client().Where(&User{Email: email}).First(&user)
 	maybeUser, err := r.GetUser(ctx, email)
 	if err != nil {
 		return &user, err
