@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	uuid "github.com/gofrs/uuid"
 	"github.com/graphql-services/idp/database"
-	uuid "github.com/satori/go.uuid"
 )
 
 type Resolver struct {
