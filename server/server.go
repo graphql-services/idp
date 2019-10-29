@@ -42,6 +42,11 @@ func main() {
 		gqlHandler(res, req)
 	})
 	http.HandleFunc("/healthcheck", func(res http.ResponseWriter, req *http.Request) {
+		if err := db.Ping(); err != nil {
+			res.WriteHeader(400)
+			res.Write([]byte("ERROR"))
+			return
+		}
 		res.WriteHeader(200)
 		res.Write([]byte("OK"))
 	})
